@@ -8,5 +8,32 @@
 }
 
 .pagination {
-    
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    margin: 15px 0;
+}
+
+.pagination__button {
+    font-size: 16px;
+    padding: 5px 10px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.pagination__button:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.pagination__button_type_number {
+    background-color: white;
+    color: black;
+    border-radius: 10%;
+}
+
+.pagination__button_type_number:hover {
+    color: white;
 }

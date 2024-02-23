@@ -26,9 +26,7 @@ export class Api {
         action: "get_ids",
         params: { offset: start, limit: lim }, //смещение с начала списка 0, лимит 50
       }),
-    })
-    .then(this._response)
-    .catch(() => console.log('не так айди вбила'))
+    }).then(this._response);
   }
 
   //получаем айдишки и по ним будем смотреть инфу о товарах
@@ -40,14 +38,14 @@ export class Api {
         action: "get_items",
         params: { ids: state },
       }),
-    }).then(this._response)
+    }).then(this._response);
   }
 }
 
 export const MainApi = new Api({
   url: BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
-    'X-Auth': hashedAuth
+    "Content-Type": "application/json",
+    "X-Auth": hashedAuth,
   },
 });

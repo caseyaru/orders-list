@@ -4,7 +4,6 @@ import OrderItem from "../OrderItem/OrderItem";
 import { MainApi } from "../../utils/api";
 
 const OrdersList = () => {
-
   const [orders, setOrders] = useState([]);
   const [displayedPages, setDisplayedPages] = useState([]);
   const itemsPerPage = 50;
@@ -23,9 +22,9 @@ const OrdersList = () => {
             console.log("res get items", res);
             setOrders(res.result);
           })
-          .catch(() => console.log("не прогрузились итемы"));
+          .catch((err) => console.log(err));
       })
-      .catch(() => console.log("не прогрузились айди"));
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -49,10 +48,22 @@ const OrdersList = () => {
     setCurrentPage(page);
   };
 
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(orders.length / itemsPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentOrders = orders.slice(indexOfFirstItem, indexOfLastItem);
-  
+
   return (
     <section>
       <ul className="list">
@@ -60,13 +71,25 @@ const OrdersList = () => {
           <OrderItem key={order.id} order={order} />
         ))}
       </ul>
-      <div className="pagination">
-        {displayedPages.map((page) => (
-                <button key={page} onClick={() => handleClick(page)}>
-                    {page}
-                </button>
-            ))}
-      </div>
+      {currentOrders.length && (
+        <div className="pagination">
+          <button onClick={handlePrevPage} className="pagination__button">
+            Назад
+          </button>
+          {displayedPages.map((page) => (
+            <button
+              key={page}
+              onClick={() => handleClick(page)}
+              className="pagination__button pagination__button_type_number"
+            >
+              {page}
+            </button>
+          ))}
+          <button onClick={handleNextPage} className="pagination__button">
+            Дальше
+          </button>
+        </div>
+      )}
     </section>
   );
 };
