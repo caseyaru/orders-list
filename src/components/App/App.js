@@ -1,7 +1,5 @@
-
-import OrdersList from '../OrdersList/OrdersList';
 import './App.css';
-// import '../../utils/api';
+import OrdersList from '../OrdersList/OrdersList';
 
 function App() {
   return (
