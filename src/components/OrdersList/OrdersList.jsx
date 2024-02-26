@@ -5,33 +5,47 @@ import { MainApi } from "../../utils/api";
 
 const OrdersList = () => {
   const [orders, setOrders] = useState([]);
-  const [displayedPages, setDisplayedPages] = useState([]);
   const itemsPerPage = 50;
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    handleSetOrders();
-  }, []);
-
   const handleSetOrders = () => {
-    MainApi.getIds(0, 200)
+    MainApi.getIds(0)
       .then((res) => {
-        console.log("res get ids", res);
-        MainApi.getItems(res.result)
-          .then((res) => {
-            console.log("res get items", res);
-            setOrders(res.result);
-          })
-          .catch((err) => console.log(err));
+        if (res) {
+          MainApi.getItems(res.result)
+            .then((res) => {
+              //console.log("res get items", res);
+              const uniqueOrders = res.result.reduce((acc, order) => {
+                if (!acc.some((existingOrder) => existingOrder.id === order.id)) {
+                  acc.push(order);
+                }
+                return acc;
+              }, []);
+        
+              setOrders(uniqueOrders);
+              console.log('uniqueOrders', uniqueOrders.length)
+            })
+            .catch((err) => console.log(err));
+        } else {
+          console.log("че-т не то с res");
+        }
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    updateDisplayedPages(currentPage);
+    handleSetOrders();
+    console.log('orders.length', orders.length)
+  }, []);
+
+  //ПАГИНАЦИЯ
+  const [displayedPages, setDisplayedPages] = useState([]);
+
+  useEffect(() => {
+    updateDisplayedPages(currentPage, orders, itemsPerPage);
   }, [currentPage, orders]);
 
-  const updateDisplayedPages = (page) => {
+  const updateDisplayedPages = (page, orders, itemsPerPage) => {
     const totalPages = Math.ceil(orders.length / itemsPerPage);
     let startPage = Math.max(1, page - 5);
     let endPage = Math.min(totalPages, startPage + 9);
@@ -60,18 +74,17 @@ const OrdersList = () => {
     }
   };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentOrders = orders.slice(indexOfFirstItem, indexOfLastItem);
+  const pageOrders = orders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  console.log(currentPage, pageOrders)
 
   return (
     <section>
       <ul className="list">
-        {currentOrders.map((order) => (
+        {pageOrders.map((order) => (
           <OrderItem key={order.id} order={order} />
         ))}
       </ul>
-      {currentOrders.length && (
+      {pageOrders.length > 0 && (
         <div className="pagination">
           <button onClick={handlePrevPage} className="pagination__button">
             Назад
@@ -80,7 +93,9 @@ const OrdersList = () => {
             <button
               key={page}
               onClick={() => handleClick(page)}
-              className="pagination__button pagination__button_type_number"
+              className={`pagination__button pagination__button_type_number ${
+                page === currentPage ? "pagination__button_active" : ""
+              }`}
             >
               {page}
             </button>

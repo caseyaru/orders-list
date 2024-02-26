@@ -26,7 +26,14 @@ export class Api {
         action: "get_ids",
         params: { offset: start, limit: lim }, //смещение с начала списка 0, лимит 50
       }),
-    }).then(this._response);
+    }).then(this._response)
+    // .then((res) => {
+    //   if (res.result.length === lim) {
+    //     return res;
+    //   } else {
+    //     return null; // Возвращаем null, если нужно выполнить дополнительный запрос
+    //   }
+    // });
   }
 
   //получаем айдишки и по ним будем смотреть инфу о товарах
