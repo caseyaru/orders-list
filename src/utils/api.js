@@ -27,13 +27,6 @@ export class Api {
         params: { offset: start, limit: lim }, //смещение с начала списка 0, лимит 50
       }),
     }).then(this._response)
-    // .then((res) => {
-    //   if (res.result.length === lim) {
-    //     return res;
-    //   } else {
-    //     return null; // Возвращаем null, если нужно выполнить дополнительный запрос
-    //   }
-    // });
   }
 
   //получаем айдишки и по ним будем смотреть инфу о товарах
@@ -46,6 +39,36 @@ export class Api {
         params: { ids: state },
       }),
     }).then(this._response);
+  }
+
+  getFields(value) {
+    return fetch(`${this._url}`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        action: "get_fields",
+        params: { "field": `${value}` },
+      }),
+    }).then(this._response)
+  }
+
+  getFilteredItems(field, value) {
+  const params = {};
+
+  // if (field === "price" && typeof value !== "number") {
+  //   throw new Error("Value for 'price' field must be a number");
+  // }
+
+  params[field] = field === "price" ? Number(value) : value;
+  //params[field] = value;
+    return fetch(`${this._url}`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        action: "filter",
+        params: params
+      }),
+    }).then(this._response)
   }
 }
 
