@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/server.js": {
-      "runtime": "node@20.11.0"
-    }
-  }
-}
