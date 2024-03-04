@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/server.js": {
-      "runtime": "node@14"
+      "runtime": "nodejs14.x"
     }
   }
 }
