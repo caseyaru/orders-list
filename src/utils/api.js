@@ -1,8 +1,8 @@
 import { AUTH, BASE_URL } from "./constants";
 import { generateHash } from "./hash";
 
-const hashedAuth = generateHash(AUTH); // итог на 22.02: 15fd1b722761a45265adeb7ae99335fe
-console.log(hashedAuth);
+const hashedAuth = generateHash(AUTH);
+//console.log(hashedAuth); //проверка захешированности
 
 export class Api {
   constructor(config) {
@@ -24,12 +24,11 @@ export class Api {
       headers: this._headers,
       body: JSON.stringify({
         action: "get_ids",
-        params: { offset: start, limit: lim }, //смещение с начала списка 0, лимит 50
+        params: { offset: start, limit: lim },
       }),
     }).then(this._response)
   }
 
-  //получаем айдишки и по ним будем смотреть инфу о товарах
   getItems(state) {
     return fetch(`${this._url}`, {
       method: "POST",
@@ -54,13 +53,7 @@ export class Api {
 
   getFilteredItems(field, value) {
   const params = {};
-
-  // if (field === "price" && typeof value !== "number") {
-  //   throw new Error("Value for 'price' field must be a number");
-  // }
-
   params[field] = field === "price" ? Number(value) : value;
-  //params[field] = value;
     return fetch(`${this._url}`, {
       method: "POST",
       headers: this._headers,

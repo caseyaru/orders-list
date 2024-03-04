@@ -1,3 +1,15 @@
+.filter {
+    margin: 20px 0 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.filter__select {
+    padding: 5px;
+    border-radius: 4px;
+}
+
 .list {
     list-style: none;
     display: flex;
