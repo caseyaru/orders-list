@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/server.js": {
+      "runtime": "node@14"
+    }
+  }
+}
